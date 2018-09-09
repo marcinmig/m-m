@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Użytkownik {{ user.username }}</h3>
+
+<dl>
+    <dt>E-Mail</dt>
+    <dd>{{ user.email }}</dd>
+
+    <dt>Last Login</dt>
+    <dd>{{ user.lastLogin | date("H:i d-m-Y") }}</dd>
+
+    <dt>Roles</dt>
+    <dd>
+        <ul>
+            {% for role in user.roles %}
+                <li>{{ role }}</li>
+            {% endfor %}
+        </ul>
+    </dd>
+</dl>
+
+{% if is_granted('ROLE_SUPER_ADMIN') %}
+    <h4>Akcje</h4>
+    <form action="{{ path('user_delete', {'userId': user.id}) }}" method="POST">
+        <input type="submit" value="Usuń" />
+    </form>
+{% endif %}
+
+{% endblock %}
