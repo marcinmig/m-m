@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Faktura {{ invoice.invoiceNumber }}</h3>
+
+<dl>
+    <dt>Nazwa kontrahenta</dt>
+    <dd>{{ invoice.contractorName }}</dd>
+
+    <dt>VATID kontrahenta</dt>
+    <dd>{{ invoice.contractorVatid }}</dd>
+
+    <dt>Kwota netto</dt>
+    <dd>{{ invoice.netValue }}</dd>
+
+    <dt>Kwota brutto</dt>
+    <dd>{{ invoice.grossValue }}</dd>
+
+    <dt>Kwota podatku VAT</dt>
+    <dd>{{ invoice.taxValue }}</dd>
+</dl>
+
+{% if is_granted('ROLE_USER') %}
+    <h4>Akcje</h4>
+    <form action="{{ path('invoice_edit', {'invoiceId': invoice.id}) }}" method="GET">
+        <input type="submit" value="Edycja" />
+    </form>
+
+    <form action="{{ path('invoice_delete', {'invoiceId': invoice.id}) }}" method="POST">
+        <input type="submit" value="Usuń" />
+    </form>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Faktury</h3>
+<a href="{{ path("invoice_create") }}">Dodaj</a>
+
+<ul>
+    {% for invoice in invoices %}
+        <li>
+            <a href="{{ path('invoice_show', {'invoiceId': invoice.id}) }}">{{ invoice.invoiceNumber }}</a>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
