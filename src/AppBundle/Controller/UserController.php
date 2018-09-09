@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -36,19 +37,20 @@ class UserController extends Controller
         $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Access denied');
 
         $form = $this->createFormBuilder()
-            ->add('username', TextType::class)
-            ->add('email', EmailType::class)
-            ->add('password',PasswordType::class)
+            ->add('username', TextType::class, ['label' => 'Nazwa użytkownika'])
+            ->add('email', EmailType::class, ['label' => 'E-Mail'])
+            ->add('password',PasswordType::class, ['label' => 'Hasło'])
             ->add('role', ChoiceType::class, [
                 'choices' => [
                     'Administrator' => 'ROLE_SUPER_ADMIN',
                     'Pracownik' => 'ROLE_USER',
                     'Audytor' => 'ROLE_AUDITOR',
-                ]
+                ],
+                'label' => 'Uprawnienia'
             ])
             ->add('submit', SubmitType::class, ['label' => 'Dodaj'])
-            ->getForm()
-        ;
+            ->getForm();
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -72,14 +74,44 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/user/{userId}", name="user_show")
+     * @Route("/user/{userId}/edit", name="user_edit", methods={"GET", "POST"})
      */
-    public function showAction($userId)
+    public function editAction(Request $request, $userId)
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_ADMIN', null, 'Access denied');
+
         $user = $this->getDoctrine()
             ->getRepository(User::class)
             ->find($userId);
-        return $this->render('user/show.html.twig', [
+
+        $form = $this->createFormBuilder($user)
+            ->add('email', EmailType::class, ['label' => 'E-Mail'])
+            ->add('plainPassword',PasswordType::class, ['required' => false, 'label' => 'Hasło'])
+            ->add('role', ChoiceType::class, [
+                'choices' => [
+                    'Administrator' => 'ROLE_SUPER_ADMIN',
+                    'Pracownik' => 'ROLE_USER',
+                    'Audytor' => 'ROLE_AUDITOR',
+                ],
+                'label' => 'Uprawnienia',
+                'mapped' => true,
+                'expanded' => true
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Zapisz'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->merge($user);
+            $em->flush();
+            $this->addFlash('success', 'Zmiany zapisane');
+        }
+
+        return $this->render('user/edit.html.twig', [
+            'form' => $form->createView(),
             'user' => $user
         ]);
     }
@@ -103,5 +135,18 @@ class UserController extends Controller
         }
 
         return $this->redirect($this->generateUrl('user_list'));
+    }
+
+    /**
+     * @Route("/user/{userId}", name="user_show")
+     */
+    public function showAction($userId)
+    {
+        $user = $this->getDoctrine()
+            ->getRepository(User::class)
+            ->find($userId);
+        return $this->render('user/show.html.twig', [
+            'user' => $user
+        ]);
     }
 }

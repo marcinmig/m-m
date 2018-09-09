@@ -23,4 +23,12 @@ class User extends BaseUser
     {
         parent::__construct();
     }
+
+    public function getRole() {
+        return $this->getRoles()[0];
+    }
+
+    public function setRole($role) {
+        $this->setRoles([$role]);
+    }
 }

@@ -23,6 +23,10 @@
 
 {% if is_granted('ROLE_SUPER_ADMIN') %}
     <h4>Akcje</h4>
+    <form action="{{ path('user_edit', {'userId': user.id}) }}" method="GET">
+        <input type="submit" value="Edycja" />
+    </form>
+
     <form action="{{ path('user_delete', {'userId': user.id}) }}" method="POST">
         <input type="submit" value="Usuń" />
     </form>
