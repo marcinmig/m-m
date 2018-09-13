@@ -49,6 +49,11 @@ class AppKernel extends Kernel
         return dirname(__DIR__).'/var/logs';
     }
 
+    public function getProjectDir()
+    {
+        return dirname($this->getRootDir());
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load(function (ContainerBuilder $container) {
