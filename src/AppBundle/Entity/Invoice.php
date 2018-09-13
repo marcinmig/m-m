@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Invoice
@@ -62,6 +63,13 @@ class Invoice
      * @ORM\Column(name="tax_value", type="decimal", precision=10, scale=0)
      */
     private $taxValue;
+
+    /**
+     * @ORM\Column(type="string")
+     *
+     * @Assert\File(mimeTypes={ "application/pdf" })
+     */
+    private $scan;
 
 
     /**
@@ -216,6 +224,22 @@ class Invoice
     public function getTaxValue()
     {
         return $this->taxValue;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getScan()
+    {
+        return $this->scan;
+    }
+
+    /**
+     * @param mixed $scan
+     */
+    public function setScan($scan)
+    {
+        $this->scan = $scan;
     }
 }
 

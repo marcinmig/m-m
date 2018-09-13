@@ -19,6 +19,11 @@
 
     <dt>Kwota podatku VAT</dt>
     <dd>{{ invoice.taxValue }}</dd>
+
+    {% if invoice.scan %}
+        <dt>Skan</dt>
+        <dd><a href="{{ asset('uploads/invoice_scans/' ~ invoice.scan) }}" target="_blank">Zobacz</a></dd>
+    {% endif %}
 </dl>
 
 {% if is_granted('ROLE_USER') %}
