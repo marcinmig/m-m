@@ -4,6 +4,15 @@
 {% block body %}
     <h3>Szukaj</h3>
 
+    <form method="get">
+        <div class="">
+            <input name="query" type="search" value="{{ app.request.query.get('query') }}" class="form-control" />
+            <input type="submit" value="Szukaj" class="btn btn-primary" />
+        </div>
+    </form>
+
+    <hr>
+
     <h4>Użytkownicy</h4>
     {% if users is defined and users is not empty %}
         <ul>

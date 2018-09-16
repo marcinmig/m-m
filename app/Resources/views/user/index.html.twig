@@ -12,6 +12,8 @@
     {% endfor %}
 </ul>
 
+{% if is_granted('ROLE_SUPER_ADMIN') %}
 <a class="btn btn-primary" href="{{ path("user_create") }}">Dodaj</a>
+{% endif %}
 
 {% endblock %}

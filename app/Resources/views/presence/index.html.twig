@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+{% if user is defined %}
+    <h3>Obecności {{ user.username }}</h3>
+{% else %}
+    <h3>Obecności</h3>
+{% endif %}
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Data</th>
+        <th>Czas rozpoczęcia</th>
+        <th>Czas zakończenia</th>
+        <th>Czas pracy</th>
+        <th>Uwagi</th>
+        {% if is_granted('ROLE_SUPER_ADMIN') %}
+            <th>Akcje</th>
+        {% endif %}
+    </tr>
+    </thead>
+
+    <tbody>
+        {% for presence in presences %}
+            <tr>
+                <td>{{ presence.date | date('d-m-Y') }}</td>
+                <td>{{ presence.startTime | date('H:i') }}</td>
+                <td>{{ presence.endTime | date('H:i') }}</td>
+                <td>{{ presence.workTime.format('%H:%I') }}</td>
+                <td>{{ presence.extraInfo }}</td>
+                {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    <td>
+                        <form action="{{ path('presence_edit', {'presenceId': presence.id}) }}" method="GET">
+                            <input class="btn btn-primary" type="submit" value="Edycja" />
+                        </form>
+
+                        <form action="{{ path('presence_delete', {'presenceId': presence.id}) }}" method="POST">
+                            <input class="btn btn-danger" type="submit" value="Usuń" />
+                        </form>
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if form is defined %}
+<h3>Dodaj wpis</h3>
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+{% endif %}
+
+{% endblock %}

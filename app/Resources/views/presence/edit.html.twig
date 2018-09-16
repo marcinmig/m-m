@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Edycja obecności {{ presence.user.username }} {{ presence.date | date('d-m-Y') }}</h3>
+
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+{% endblock %}

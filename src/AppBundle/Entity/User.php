@@ -29,6 +29,11 @@ class User extends BaseUser
      */
     private $licenses;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Presence", mappedBy="user")
+     */
+    private $presence;
+
     public function __construct()
     {
         parent::__construct();

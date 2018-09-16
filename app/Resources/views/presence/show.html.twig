@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Sprzęt {{ device.name }}</h3>
+
+<dl>
+    <dt>Numery seryjny</dt>
+    <dd>{{ device.serialNumber }}</dd>
+
+    <dt>Data zakupu</dt>
+    <dd>{{ device.purchaseDate | date('d-m-Y') }}</dd>
+
+    <dt>Data wygaśnięcia gwarancji</dt>
+    <dd>{{ device.warrantyExpirationDate | date('d-m-Y') }}</dd>
+
+    <dt>Kwota netto</dt>
+    <dd>{{ device.netPrice }}</dd>
+
+    <dt>Notatki</dt>
+    <dd>{{ device.notes }}</dd>
+
+    <dt>Właściciel</dt>
+    <dd>
+        <a href="{{ path('user_show', {'userId': device.owner.id}) }}">
+            {{ device.owner.username }}
+        </a>
+    </dd>
+
+    <dt>Faktura</dt>
+    <dd>
+        <a href="{{ path('invoice_show', {'invoiceId': device.invoice.id}) }}">
+            {{ device.invoice.invoiceNumber }}
+        </a>
+    </dd>
+</dl>
+
+{% if is_granted('ROLE_USER') %}
+    <h4>Akcje</h4>
+    <form action="{{ path('device_edit', {'deviceId': device.id}) }}" method="GET">
+        <input class="btn btn-primary" type="submit" value="Edycja" />
+    </form>
+
+    <form action="{{ path('device_delete', {'deviceId': device.id}) }}" method="POST">
+        <input class="btn btn-danger" type="submit" value="Usuń" />
+    </form>
+{% endif %}
+
+{% endblock %}
