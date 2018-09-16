@@ -76,6 +76,11 @@ class Invoice
      */
     private $devices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="License", mappedBy="invoice")
+     */
+    private $licenses;
+
 
     /**
      * Get id
@@ -261,6 +266,22 @@ class Invoice
     public function setDevices($devices)
     {
         $this->devices = $devices;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLicenses()
+    {
+        return $this->licenses;
+    }
+
+    /**
+     * @param mixed $licenses
+     */
+    public function setLicenses($licenses)
+    {
+        $this->licenses = $licenses;
     }
 }
 

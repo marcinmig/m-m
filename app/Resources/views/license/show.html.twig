@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Licencja {{ license.name }}</h3>
+
+<dl>
+    <dt>Klucz seryjny</dt>
+    <dd>{{ license.serialNumber }}</dd>
+
+    <dt>Data zakupu</dt>
+    <dd>{{ license.purchaseDate | date('d-m-Y') }}</dd>
+
+    <dt>Data wygaśnięcia</dt>
+    <dd>{{ license.expirationDate | date('d-m-Y') }}</dd>
+
+    <dt>Data wygaśnięcia wsparcia</dt>
+    <dd>{{ license.supportExpirationDate | date('d-m-Y') }}</dd>
+
+    <dt>Notatki</dt>
+    <dd>{{ license.notes }}</dd>
+
+    <dt>Właściciel</dt>
+    <dd>
+        <a href="{{ path('user_show', {'userId': license.owner.id}) }}">
+            {{ license.owner.username }}
+        </a>
+    </dd>
+
+    <dt>Faktura</dt>
+    <dd>
+        <a href="{{ path('invoice_show', {'invoiceId': license.invoice.id}) }}">
+            {{ license.invoice.invoiceNumber }}
+        </a>
+    </dd>
+</dl>
+
+{% if is_granted('ROLE_USER') %}
+    <h4>Akcje</h4>
+    <form action="{{ path('license_edit', {'licenseId': license.id}) }}" method="GET">
+        <input class="btn btn-primary" type="submit" value="Edycja" />
+    </form>
+
+    <form action="{{ path('license_delete', {'licenseId': license.id}) }}" method="POST">
+        <input class="btn btn-danger" type="submit" value="Usuń" />
+    </form>
+{% endif %}
+
+{% endblock %}

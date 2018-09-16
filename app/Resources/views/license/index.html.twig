@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Licencje</h3>
+
+<ul>
+    {% for license in licenses %}
+        <li>
+            <a href="{{ path('license_show', {'licenseId': license.id}) }}">{{ license.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<a class="btn btn-primary" href="{{ path("license_create") }}">Dodaj</a>
+
+{% endblock %}

@@ -2,7 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Device;
+use AppBundle\Entity\License;
 use AppBundle\Entity\Invoice;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,39 +15,39 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 
-class DeviceController extends Controller
+class LicenseController extends Controller
 {
     /**
-     * @Route("/device", name="device_list")
+     * @Route("/license", name="license_list")
      */
     public function indexAction()
     {
-        $devices = $this->getDoctrine()
-            ->getRepository(Device::class)
+        $licenses = $this->getDoctrine()
+            ->getRepository(License::class)
             ->findAll();
 
-        return $this->render('device/index.html.twig', [
-            'devices' => $devices
+        return $this->render('license/index.html.twig', [
+            'licenses' => $licenses
         ]);
     }
 
     /**
-     * @Route("/device/create", name="device_create")
+     * @Route("/license/create", name="license_create")
      */
     public function createAction(Request $request)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Access denied');
 
-        $device = new Device();
+        $license = new License();
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         $invoices = $this->getDoctrine()->getRepository(Invoice::class)->findAll();
 
-        $form = $this->createFormBuilder($device)
+        $form = $this->createFormBuilder($license)
             ->add('name', TextType::class, ['label' => 'Nazwa/Opis'])
-            ->add('serialNumber', TextType::class, ['label' => 'Numer seryjny'])
+            ->add('serialNumber', TextType::class, ['label' => 'Klucz seryjny'])
             ->add('purchaseDate', DateType::class, ['label' => 'Data zakupu'])
-            ->add('warrantyExpirationDate', DateType::class, ['label' => 'Data wygaśnięcia gwarancji'])
-            ->add('netPrice', NumberType::class, ['label' => 'Kwota netto'])
+            ->add('supportExpirationDate', DateType::class, ['label' => 'Data wygaśnięcia wsparcia'])
+            ->add('expirationDate', DateType::class, ['label' => 'Data wygaśnięcia licencji'])
             ->add('notes', TextareaType::class, ['label' => 'Notatki', 'required' => false])
             ->add('owner', ChoiceType::class, [
                 'label' => 'Właściciel',
@@ -75,38 +75,38 @@ class DeviceController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $device = $form->getData();
+            $license = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $em->persist($device);
+            $em->persist($license);
             $em->flush();
-            $this->addFlash('success', 'Urządzenie dodane');
-            return $this->redirectToRoute('device_show', ['deviceId' => $device->getId()]);
+            $this->addFlash('success', 'Licencja dodana');
+            return $this->redirectToRoute('license_show', ['licenseId' => $license->getId()]);
         }
 
-        return $this->render('device/create.html.twig', [
+        return $this->render('license/create.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
     /**
-     * @Route("/device/{deviceId}/edit", name="device_edit", methods={"GET", "POST"})
+     * @Route("/license/{licenseId}/edit", name="license_edit", methods={"GET", "POST"})
      */
-    public function editAction(Request $request, $deviceId)
+    public function editAction(Request $request, $licenseId)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Access denied');
 
-        $device = $this->getDoctrine()
-            ->getRepository(Device::class)
-            ->find($deviceId);
+        $license = $this->getDoctrine()
+            ->getRepository(License::class)
+            ->find($licenseId);
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         $invoices = $this->getDoctrine()->getRepository(Invoice::class)->findAll();
 
-        $form = $this->createFormBuilder($device)
+        $form = $this->createFormBuilder($license)
             ->add('name', TextType::class, ['label' => 'Nazwa/Opis'])
-            ->add('serialNumber', TextType::class, ['label' => 'Numer seryjny'])
+            ->add('serialNumber', TextType::class, ['label' => 'Klucz seryjny'])
             ->add('purchaseDate', DateType::class, ['label' => 'Data zakupu'])
-            ->add('warrantyExpirationDate', DateType::class, ['label' => 'Data wygaśnięcia gwarancji'])
-            ->add('netPrice', NumberType::class, ['label' => 'Kwota netto'])
+            ->add('supportExpirationDate', DateType::class, ['label' => 'Data wygaśnięcia wsparcia'])
+            ->add('expirationDate', DateType::class, ['label' => 'Data wygaśnięcia licencji'])
             ->add('notes', TextareaType::class, ['label' => 'Notatki', 'required' => false])
             ->add('owner', ChoiceType::class, [
                 'label' => 'Właściciel',
@@ -134,46 +134,46 @@ class DeviceController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $device = $form->getData();
+            $license = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $em->merge($device);
+            $em->merge($license);
             $em->flush();
             $this->addFlash('success', 'Zmiany zapisane');
         }
 
-        return $this->render('device/edit.html.twig', [
+        return $this->render('license/edit.html.twig', [
             'form' => $form->createView(),
-            'device' => $device
+            'license' => $license
         ]);
     }
 
     /**
-     * @Route("/device/{deviceId}/delete", name="device_delete", methods={"POST"})
+     * @Route("/license/{licenseId}/delete", name="license_delete", methods={"POST"})
      */
-    public function deleteAction($deviceId)
+    public function deleteAction($licenseId)
     {
         $this->denyAccessUnlessGranted('ROLE_USER', null, 'Access denied');
 
-        $device = $this->getDoctrine()->getRepository(Device::class)->find($deviceId);
+        $license = $this->getDoctrine()->getRepository(License::class)->find($licenseId);
         $em = $this->getDoctrine()->getManager();
-        $em->remove($device);
+        $em->remove($license);
         $em->flush();
         $this->addFlash('success', 'Sprzęt usunięty');
 
-        return $this->redirect($this->generateUrl('device_list'));
+        return $this->redirect($this->generateUrl('license_list'));
     }
 
     /**
-     * @Route("/device/{deviceId}", name="device_show")
+     * @Route("/license/{licenseId}", name="license_show")
      */
-    public function showAction($deviceId)
+    public function showAction($licenseId)
     {
-        $device = $this->getDoctrine()
-            ->getRepository(Device::class)
-            ->find($deviceId);
+        $license = $this->getDoctrine()
+            ->getRepository(License::class)
+            ->find($licenseId);
 
-        return $this->render('device/show.html.twig', [
-            'device' => $device
+        return $this->render('license/show.html.twig', [
+            'license' => $license
         ]);
     }
 }

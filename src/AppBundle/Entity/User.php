@@ -24,6 +24,11 @@ class User extends BaseUser
      */
     private $devices;
 
+    /**
+     * @ORM\OneToMany(targetEntity="License", mappedBy="owner")
+     */
+    private $licenses;
+
     public function __construct()
     {
         parent::__construct();
@@ -51,5 +56,21 @@ class User extends BaseUser
     public function setDevices($devices)
     {
         $this->devices = $devices;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLicenses()
+    {
+        return $this->licenses;
+    }
+
+    /**
+     * @param mixed $licenses
+     */
+    public function setLicenses($licenses)
+    {
+        $this->licenses = $licenses;
     }
 }
