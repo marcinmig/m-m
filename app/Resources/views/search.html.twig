@@ -5,7 +5,7 @@
     <h3>Szukaj</h3>
 
     <h4>Użytkownicy</h4>
-    {% if users is defined %}
+    {% if users is defined and users is not empty %}
         <ul>
             {% for user in users %}
                 <li><a href="{{ path('user_show', {userId: user.id}) }}">{{ user.username }}</a></li>
@@ -16,10 +16,32 @@
     {% endif %}
 
     <h4>Faktury</h4>
-    {% if invoices is defined %}
+    {% if invoices is defined and invoices is not empty %}
         <ul>
             {% for invoice in invoices %}
                 <li><a href="{{ path('invoice_show', {invoiceId: invoice.id}) }}">{{ invoice.invoiceNumber }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Brak wyników</p>
+    {% endif %}
+
+    <h4>Sprzęt</h4>
+    {% if devices is defined and devices is not empty %}
+        <ul>
+            {% for device in devices %}
+                <li><a href="{{ path('device_show', {deviceId: device.id}) }}">{{ device.name }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Brak wyników</p>
+    {% endif %}
+
+    <h4>Licencje</h4>
+    {% if licenses is defined and licenses is not empty %}
+        <ul>
+            {% for license in licenses %}
+                <li><a href="{{ path('license_show', {licenseId: license.id}) }}">{{ license.name }}</a></li>
             {% endfor %}
         </ul>
     {% else %}

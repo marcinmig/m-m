@@ -2,7 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Device;
 use AppBundle\Entity\Invoice;
+use AppBundle\Entity\License;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -24,7 +26,14 @@ class SearchController extends Controller
 
         $users = $this->getDoctrine()->getRepository(User::class)->search($query);
         $invoices = $this->getDoctrine()->getRepository(Invoice::class)->search($query);
+        $devices = $this->getDoctrine()->getRepository(Device::class)->search($query);
+        $licenses = $this->getDoctrine()->getRepository(License::class)->search($query);
 
-        return $this->render('search.html.twig', ['users' => $users, 'invoices' => $invoices]);
+        return $this->render('search.html.twig', [
+            'users' => $users,
+            'invoices' => $invoices,
+            'devices' => $devices,
+            'licenses' => $licenses,
+        ]);
     }
 }

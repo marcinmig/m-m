@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class LicenseRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function search($query)
+    {
+        return $this->createQueryBuilder('l')
+            ->where('l.name LIKE :query')
+            ->orWhere('l.serialNumber LIKE :query')
+            ->orWhere('l.notes LIKE :query')
+            ->setParameter('query', '%'.$query.'%')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

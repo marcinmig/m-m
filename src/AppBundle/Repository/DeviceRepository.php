@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class DeviceRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function search($query)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.name LIKE :query')
+            ->orWhere('d.serialNumber LIKE :query')
+            ->orWhere('d.notes LIKE :query')
+            ->setParameter('query', '%'.$query.'%')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }
