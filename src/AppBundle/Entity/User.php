@@ -19,6 +19,11 @@ class User extends BaseUser
      */
     protected $id;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Device", mappedBy="owner")
+     */
+    private $devices;
+
     public function __construct()
     {
         parent::__construct();
@@ -30,5 +35,21 @@ class User extends BaseUser
 
     public function setRole($role) {
         $this->setRoles([$role]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDevices()
+    {
+        return $this->devices;
+    }
+
+    /**
+     * @param mixed $devices
+     */
+    public function setDevices($devices)
+    {
+        $this->devices = $devices;
     }
 }

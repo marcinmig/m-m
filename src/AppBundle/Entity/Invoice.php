@@ -71,6 +71,11 @@ class Invoice
      */
     private $scan;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Device", mappedBy="invoice")
+     */
+    private $devices;
+
 
     /**
      * Get id
@@ -240,6 +245,22 @@ class Invoice
     public function setScan($scan)
     {
         $this->scan = $scan;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDevices()
+    {
+        return $this->devices;
+    }
+
+    /**
+     * @param mixed $devices
+     */
+    public function setDevices($devices)
+    {
+        $this->devices = $devices;
     }
 }
 

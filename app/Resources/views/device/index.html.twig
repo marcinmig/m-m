@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+<h3>Sprzęt</h3>
+
+<ul>
+    {% for device in devices %}
+        <li>
+            <a href="{{ path('device_show', {'deviceId': device.id}) }}">{{ device.name }}</a>
+        </li>
+    {% endfor %}
+</ul>
+
+<a class="btn btn-primary" href="{{ path("device_create") }}">Dodaj</a>
+
+{% endblock %}
