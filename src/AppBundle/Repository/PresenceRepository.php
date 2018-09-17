@@ -10,4 +10,12 @@ namespace AppBundle\Repository;
  */
 class PresenceRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function search($query, $from, $to)
+    {
+        $q = $this->getEntityManager()->createQuery('SELECT p, u FROM AppBundle:Presence p JOIN p.user u WHERE u.username LIKE :query AND p.date BETWEEN :from AND :to');
+        $q->setParameter('query', '%'.$query.'%');
+        $q->setParameter('from', $from);
+        $q->setParameter('to', $to);;
+        return $q->getArrayResult();
+    }
 }
