@@ -10,14 +10,14 @@ namespace AppBundle\Repository;
  */
 class InvoiceRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function search($query)
+    public function search($query, $from, $to)
     {
-        return $this->createQueryBuilder('i')
-            ->where('i.contractorName LIKE :query')
-            ->orWhere('i.contractorVatid LIKE :query')
-            ->orWhere('i.invoiceNumber LIKE :query')
-            ->setParameter('query', '%'.$query.'%')
-            ->getQuery()
-            ->getArrayResult();
+        $q = $this->getEntityManager()->createQuery(
+            'SELECT i FROM AppBundle:Invoice i WHERE (i.contractorName LIKE :query OR i.contractorVatid LIKE :query OR i.invoiceNumber LIKE :query) AND i.date BETWEEN :from AND :to'
+        );
+        $q->setParameter('query', '%'.$query.'%');
+        $q->setParameter('from', $from);
+        $q->setParameter('to', $to);
+        return $q->getArrayResult();
     }
 }

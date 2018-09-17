@@ -26,12 +26,14 @@ class SearchController extends Controller
             ->add('from', DateType::class, [
                 'label' => 'Szukaj od',
                 'required' => false,
-                'empty_data' => null
+                'empty_data' => null,
+                'widget' => 'text'
             ])
             ->add('to', DateType::class, [
                 'label' => 'Szukaj do',
                 'required' => false,
-                'empty_data' => null
+                'empty_data' => null,
+                'widget' => 'text'
             ])
             ->add('submit', SubmitType::class, ['label' => 'Szukaj'])
             ->getForm();

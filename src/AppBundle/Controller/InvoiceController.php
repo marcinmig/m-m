@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Invoice;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -42,7 +43,8 @@ class InvoiceController extends Controller
             ->add('contractorVatid',TextType::class, ['label' => 'VAT ID kontrahenta'])
             ->add('netValue', NumberType::class, ['label' => 'Kwota netto'])
             ->add('grossValue', NumberType::class, ['label' => 'Kwota brutto'])
-            ->add('taxValue', NumberType::class, ['label' => 'Kwtota podatku VAT'])
+            ->add('taxValue', NumberType::class, ['label' => 'Ktota podatku VAT'])
+            ->add('date', DateType::class, ['label' => 'Data wystawienia'])
             ->add('scan', FileType::class, ['label' => 'Skan faktury (PDF)'])
             ->add('submit', SubmitType::class, ['label' => 'Dodaj'])
             ->getForm();
@@ -92,6 +94,7 @@ class InvoiceController extends Controller
             ->add('netValue', NumberType::class, ['label' => 'Kwota netto'])
             ->add('grossValue', NumberType::class, ['label' => 'Kwota brutto'])
             ->add('taxValue', NumberType::class, ['label' => 'Kwtota podatku VAT'])
+            ->add('date', DateType::class, ['label' => 'Data wystawienia'])
             ->add('scan', FileType::class, ['label' => 'Skan faktury (PDF)'])
             ->add('submit', SubmitType::class, ['label' => 'Zapisz'])
             ->getForm();

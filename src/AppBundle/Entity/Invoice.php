@@ -81,6 +81,11 @@ class Invoice
      */
     private $licenses;
 
+    /**
+     * @ORM\Column(name="date", type="date")
+     */
+    private $date;
+
 
     /**
      * Get id
@@ -282,6 +287,22 @@ class Invoice
     public function setLicenses($licenses)
     {
         $this->licenses = $licenses;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param mixed $date
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
     }
 }
 

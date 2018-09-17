@@ -20,6 +20,9 @@
     <dt>Kwota podatku VAT</dt>
     <dd>{{ invoice.taxValue }}</dd>
 
+    <dt>Data wystawienia</dt>
+    <dd>{{ invoice.date | date('d-m-Y') }}</dd>
+
     {% if invoice.scan %}
         <dt>Skan</dt>
         <dd><a href="{{ asset('uploads/invoice_scans/' ~ invoice.scan) }}" target="_blank">Zobacz</a></dd>
