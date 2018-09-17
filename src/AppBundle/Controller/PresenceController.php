@@ -25,9 +25,16 @@ class PresenceController extends Controller
                 ->getRepository(User::class)
                 ->findAll();
 
-            return $this->render('presence/index-admin.html.twig', ['users' => $users]);
-        }
+            $dates = [];
+            $now = new \DateTime("now");
+            $days = date("t");
+            for ($i = 1; $i <= $days; $i++) {
+                $dates[]= "$i-{$now->format('m-Y')}";
+            }
 
+
+            return $this->render('presence/index-admin.html.twig', ['users' => $users, 'dates' => $dates]);
+        }
 
         $presence = new Presence();
         $form = $this->createFormBuilder($presence)
@@ -126,6 +133,21 @@ class PresenceController extends Controller
 
         return $this->render('presence/index.html.twig', [
             'user' => $user,
+            'presences' => $presences
+        ]);
+    }
+
+    /**
+     * @Route("/presence/for-date/{date}", name="presence_show_date")
+     */
+    public function showDateAction($date)
+    {
+        $presences = $this->getDoctrine()
+            ->getRepository(Presence::class)
+            ->findBy(['date' => new \DateTime($date)]);
+
+        return $this->render('presence/by-date.html.twig', [
+            'date' => $date,
             'presences' => $presences
         ]);
     }
